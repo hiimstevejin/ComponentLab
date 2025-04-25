@@ -14,6 +14,7 @@ interface PropExample {
 export interface IComponent extends Document {
   _id: Types.ObjectId;
   name: string;
+  view: number;
   description: string;
   files: CodeFile[];
   propsExample: PropExample;
@@ -29,6 +30,7 @@ const componentSchema = new Schema<IComponent>(
       default: () => new Types.ObjectId(),
     },
     name: { type: String, required: true },
+    view: {type:Number, default: 0},
     description: { type: String },
     files: [
       {
