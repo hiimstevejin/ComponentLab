@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import routes from "./routes/userRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import componentRoutes from "./routes/componentRoutes.js";
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth/register", routes);
+app.use("/api/auth/register", userRoutes);
+app.use("/api/components", componentRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI!, {
