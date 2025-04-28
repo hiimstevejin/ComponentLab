@@ -1,13 +1,13 @@
 import { Document, Schema, model, Types } from "mongoose";
 
-interface CodeFile {
+export interface CodeFile {
   name: string;       //  e.g., "FancyButton.jsx "
   path: string;       //  e.g., "src/components"
   language: string;   //  e.g., "jsx", "css"
   content: string;    //  full source code 
 }
 
-interface PropExample {
+export interface PropExample {
   label: string;      //  e.g., "Click Me" 
 }
 
