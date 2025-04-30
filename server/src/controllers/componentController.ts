@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
-import Component, {
-  PropExample,
-  CodeFile,
-} from "../models/Component.js";
+import Component, { PropExample, CodeFile } from "../models/Component.js";
 
 interface CreateComponentBody {
   name: string;
@@ -12,7 +9,7 @@ interface CreateComponentBody {
   createdBy: string;
 }
 
-export default async function createComponent(
+export async function createComponent(
   req: Request<{}, {}, CreateComponentBody>,
   res: Response
 ) {
@@ -41,4 +38,27 @@ export default async function createComponent(
     console.log("Error creating component:", error);
     res.status(500).json({ error: "Failed to create component" });
   }
+}
+
+// GET request that returns all components by page and limit
+export async function getAllComponents(req: Request, res: Response) {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 16;
+    const skip = (page - 1) * limit;
+
+    const components = await Component.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Component.countDocuments();
+
+    res.status(200).json({
+      components,
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+    });
+  } catch (error) {}
 }
