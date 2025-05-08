@@ -59,6 +59,23 @@ export async function getComponentById(req: Request, res: Response) {
   }
 }
 
+// DELETE request to delete a component by ID
+export async function deleteComponentById(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const component = await Component.findByIdAndDelete(id);
+
+    if (!component) {
+      return res.status(404).json({ error: "Component not found" });
+    }
+    res.status(200).json({ message: "Component deleted successfully" });
+  } catch (error) {
+    console.log("Error deleting component by ID", error);
+    res.status(500).json({ error: "Failed to delete component" });
+  }
+}
+
 // GET request that returns all components by page and limit
 export async function getAllComponents(req: Request, res: Response) {
   try {
