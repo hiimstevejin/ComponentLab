@@ -9,6 +9,7 @@ interface CreateComponentBody {
   createdBy: string;
 }
 
+// POST request to upload a new component
 export async function createComponent(
   req: Request<{}, {}, CreateComponentBody>,
   res: Response
@@ -37,6 +38,24 @@ export async function createComponent(
   } catch (error) {
     console.log("Error creating component:", error);
     res.status(500).json({ error: "Failed to create component" });
+  }
+}
+
+// GET request that returns one component by Id
+export async function getComponentById(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const component = await Component.findById(id);
+
+    if (!component) {
+      return res.status(404).json({ error: "Component not found" });
+    }
+
+    res.status(200).json(component);
+  } catch (error) {
+    console.log("Error fetching component by ID", error);
+    res.status(500).json({ error: "Failed to fetch component" });
   }
 }
 
