@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Component, { PropExample, CodeFile } from "../models/Component.js";
-import { compileJSXtoJS } from "../utils/compileComponent.js";
 import fs from "fs";
 import path from "path";
 
@@ -46,24 +45,6 @@ export async function createComponent(
   }
 }
 
-// GET request that returns one component source jsx code by Id
-export async function getComponentSourceById(req: Request, res: Response) {
-  try {
-    const { id } = req.params;
-
-    const component = await Component.findById(id);
-
-    if (!component) {
-      return res.status(404).json({ error: "Component not found" });
-    }
-
-    res.status(200).json(component);
-  } catch (error) {
-    console.log("Error fetching component by ID", error);
-    res.status(500).json({ error: "Failed to fetch component" });
-  }
-}
-
 // GET request that returns one component by Id
 export async function getComponentById(req: Request, res: Response) {
   try {
@@ -75,23 +56,7 @@ export async function getComponentById(req: Request, res: Response) {
       return res.status(404).json({ error: "Component not found" });
     }
 
-    const jsxFile = component.files.find((f) => f.name.endsWith(".jsx"));
-    if (!jsxFile) {
-      return res.status(400).json({ error: "JSX file not found in component" });
-    }
-
-    //Compile JSX → JS
-    const compiledCode = compileJSXtoJS(jsxFile.content);
-
-    //Write compiled file to /public/compiled/:id.js
-    const compiledPath = path.join("public", "compiled", `${id}.js`);
-    fs.writeFileSync(compiledPath, compiledCode);
-
-    //Return component info + compiled file URL
-    res.status(200).json({
-      ...component.toObject(),
-      compiledUrl: `/compiled/${id}.js`,
-    });
+    res.status(200).json(component);
   } catch (error) {
     console.log("Error fetching component by ID", error);
     res.status(500).json({ error: "Failed to fetch component" });
