@@ -17,6 +17,7 @@ export interface IComponent extends Document {
   view: number;
   description: string;
   files: CodeFile[];
+  imageUrl: string;
   propsExample: PropExample;
   createdBy: Types.ObjectId;  // refer to User _id
   createdAt: Date;
@@ -32,6 +33,7 @@ const componentSchema = new Schema<IComponent>(
     name: { type: String, required: true },
     view: {type:Number, default: 0},
     description: { type: String },
+    imageUrl: { type: String },
     files: [
       {
         name: { type: String, required: true },
