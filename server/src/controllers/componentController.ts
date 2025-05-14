@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import Component, { PropExample, CodeFile } from "../models/Component.js";
+import fs from "fs";
+import path from "path";
 
 interface CreateComponentBody {
   name: string;
   description: string;
+  imageUrl: string;
   propsExample: PropExample;
   files: CodeFile[];
   createdBy: string;
@@ -15,7 +18,8 @@ export async function createComponent(
   res: Response
 ) {
   try {
-    const { name, description, propsExample, files, createdBy } = req.body;
+    const { name, description, propsExample, imageUrl, files, createdBy } =
+      req.body;
 
     if (!name || !description || !propsExample || !files) {
       return res
